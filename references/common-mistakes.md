@@ -89,6 +89,71 @@
 
 ---
 
+## 四、软件工程典型错误
+
+### 空指针 / 未处理 Optional
+
+| 错误 | 引导提问 |
+|------|---------|
+| 调用方法前未检查 null/None | "这个变量有可能为 null 吗？什么情况下是 null？你的代码处理那种情况了吗？" |
+| Optional 链式调用（a?.b?.c 但未处理最终 null）| "如果 a 是 null，整个表达式返回什么？你的下一步代码能处理这个返回值吗？" |
+| 返回 null 作为列表/集合的替代 | "为什么返回 null 而不是空列表？调用方必须加 null check，这增加了出错可能。空列表会不会更安全？" |
+| 未使用 Optional 类型标注 | "这个参数可以为 null 吗？如果是，类型标注应该用 Optional[...]。这能让 IDE 帮你检测。#TODO: 加上类型标注" |
+
+### 可变对象导致封装破坏
+
+| 错误 | 引导提问 |
+|------|---------|
+| getter 返回内部 mutable 对象的引用 | "调用方拿到了你内部 list 的引用后，可以直接修改你的 private 字段。这是封装破坏 (broken encapsulation)。返回一个 copy 会不会更安全？" |
+| 构造函数直接存储外部传入的 mutable 参数 | "如果调用方在外部修改了传入的 list，你内部的状态就变了——这是无意的副作用。应该存储一份 copy 还是引用？" |
+| 类的 static/class variable 是 mutable 对象被所有实例共享 | "所有实例共享同一个 list？你确定这是你想要的行为吗？如果不是，这个 list 应该在 __init__ 里初始化。" |
+
+### 循环依赖 (Circular Dependency)
+
+| 错误 | 引导提问 |
+|------|---------|
+| A import B，B import A（直接循环依赖）| "模块 A 和模块 B 互相 import。运行时哪个先加载？这会产生什么错误？怎么打破这个环？" |
+| 包级别的循环依赖（Module A → pkg.B → pkg.C → A）| "依赖图中有一条环。查一下：import 关系画出来是什么形状？能不能引入一个抽象接口/基类来打破？" |
+| 构造函数循环依赖（X 需要 Y，Y 需要 X）| "如果 X 的构造需要 Y，Y 的构造需要 X——这就是循环依赖。你需要 Dependency Injection 或者 Factory pattern。你教案中哪个 pattern 解决这个问题？" |
+
+### 测试覆盖不全
+
+| 错误 | 引导提问 |
+|------|---------|
+| 只测 happy path（正常输入）| "你的测试覆盖了哪几类场景？Normal？Edge？Error？至少每类 1 个。现在是全测 normal 吗？" |
+| 测试之间有依赖（共享 mutable state）| "Test A 的结果会影响 Test B 吗？如果单独跑 Test B（不跑 Test A），它能通过吗？" |
+| 测试名为 test1 / test2 等无意义名称 | "test1 测了什么？10 天后你自己还看得懂吗？用命名表达：test_[method]_[scenario]_[expected]。" |
+| 断言不精确（assertTrue 代替 assertEquals）| "assertTrue(result) 等于 assertTrue(True)……它不验证值。你期望的精确返回值是什么？用 assertEquals 替代。" |
+| 未测试异常路径（try-catch 中的异常分支）| "try 块里的代码如果抛异常，catch 块被执行了吗？怎么测异常路径？JUnit 的 assertThrows / pytest.raises。" |
+
+### 异常处理不当
+
+| 错误 | 引导提问 |
+|------|---------|
+| 空 catch 块（吞异常）| "except: pass ——异常被吞了，之后的代码以为一切正常。如果异常在这里发生，程序的行为会符合预期吗？" |
+| 捕获过于宽泛（bare except / catch Exception）| "你捕获了所有 Exception，包括 KeyboardInterrupt 和 SystemExit。你确定要拦截这些吗？应该精确捕获你预期处理的异常类型。" |
+| finally 中有 return（覆盖了 try 的 return 和异常）| "finally 块中有 return，它会覆盖 try 中的 return 值，甚至吞掉未处理的异常。finally 应该只做清理，不做控制流。" |
+
+### 并发问题
+
+| 错误 | 引导提问 |
+|------|---------|
+| 共享变量未加锁 (race condition) | "如果两个线程同时执行这一行修改共享变量，最终结果是什么？你需要什么同步机制？" |
+| 死锁 (deadlock) | "Thread A 持有 lock1 等 lock2，Thread B 持有 lock2 等 lock1——谁先让步？获取锁的顺序一致吗？" |
+| 在循环中检查条件而不 wait（busy-waiting）| "你的 while (!condition) 在自旋等待。这会浪费 CPU。能否用 wait/notify 或 Condition Variable？" |
+
+### Git 常见错误
+
+| 错误 | 引导提问 |
+|------|---------|
+| `git add .` 暂存了不该提交的文件 | "add 之前跑 git status 确认了吗？现在哪些文件被 staged？有没有 .class / .pyc / .env 混进来？" |
+| 直接在 main 分支上开发 | "你在 main 上改代码？应该创建 feature branch。如果同事也在改 main 会冲突。#TODO: 创建 feature branch 并把改动 cherry-pick 过去。" |
+| Commit message "fix" / "update" 无上下文 | "fix 了什么？半年后你翻到这条 commit 能看懂吗？格式：type(scope): short description ——如 fix(login): correct null pointer on empty input" |
+| 合并冲突直接接受所有 incoming/current | "你解决冲突时是直接选一边的代码，还是确认两边的改动逻辑？删除的代码可能是你同事有意添加的——问过他们了吗？" |
+| `git push --force` 覆盖了同事的提交 | "force push 会覆盖远程历史。有没有同事在你上次 pull 后新 push 的 commits？你确认过吗？更好的做法是用 --force-with-lease。" |
+
+---
+
 ## 三、辅导使用方式
 
 当学生的作业出现以上错误时：
