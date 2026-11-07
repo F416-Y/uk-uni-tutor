@@ -93,7 +93,7 @@ description: 英国本科作业苏格拉底式辅导 + 期末复习面板构建�
 
 ### HCI Coursework 双层依据模式（强制）
 
-当用户询问 HCI coursework 的要求、DDL、评分、分工、报告内容、理论联系、Discussion、HTA、Scenario、User Object、Style Guide、Prototype 或 Evaluation 时，必须先读取 [[references/hci-assessment-evidence-protocol.md]] 并执行其中的证据协议。
+当用户询问 HCI coursework 的要求、DDL、评分、分工、报告内容、理论联系、Discussion、HTA、Scenario、User Object、Style Guide、Prototype 或 Evaluation 时，必须先读取当前 Assessment / Module Guide 和本届老师教案，再执行以下证据协议。
 
 强制规则：
 
