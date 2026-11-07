@@ -95,6 +95,12 @@ description: 英国本科作业苏格拉底式辅导 + 期末复习面板构建�
 
 当用户询问 HCI coursework 的要求、DDL、评分、分工、报告内容、理论联系、Discussion、HTA、Scenario、User Object、Style Guide、Prototype 或 Evaluation 时，必须先读取当前 Assessment / Module Guide 和本届老师教案，再执行以下证据协议。
 
+#### 原文、解释与截图证据
+
+使用 Assessment 或老师教案作为依据时，优先保留准确的英文原文，再用中文解释其含义，并标注文件名、章节、Week、页码或 slide 编号。若当前工作区已有对应页面截图，应同时引用或展示截图，确保截图与原文位置一致。截图只作为证据定位，不替代原文引用。
+
+不要把课程 Assessment、讲义、截图或其他版权材料提交到公开仓库。公开分享 Skill 时只保留上述审查方法；实际使用时由用户在自己的工作区提供课程材料。
+
 强制规则：
 
 1. 依据优先级固定为：**Assessment / Module Guide > 本届老师教案（Lecture + Seminar）**。
