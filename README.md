@@ -1,6 +1,6 @@
 # UK Uni Tutor
 
-面向中文母语留学生的英国本科作业苏格拉底式辅导 Skill（Claude Code 插件）。通过阶梯式提问、`#TODO` 填空和学科专属引导模板，帮助学生**独立完成作业**——不给答案，只给方法。
+面向中文母语留学生的英国本科作业苏格拉底式辅导 Skill（适用于 Claude Code、Codex 等支持 Skills 的 Agent）。通过阶梯式提问、`#TODO` 填空和学科专属引导模板，帮助学生**独立完成作业**，不给答案，只给方法。
 
 **适用对象**：在英国就读 CS/SE/数学/统计/工科等本科课程、以英文教案学习但更习惯中文思考的中国留学生。
 
@@ -23,16 +23,22 @@
 
 ## 快速开始
 
-### 1. 安装到 Claude Code
+### 1. 安装
 
 ```bash
-# 克隆仓库到 Claude Code 的 skills 目录
-git clone https://github.com/F416-Y/uk-uni-tutor.git ~/.claude/skills/uk-uni-tutor
+# 使用 Skills CLI 安装到当前 Agent
+npx skills add F416-Y/uk-uni-tutor -g -y
 ```
 
-安装后重新启动 Claude Code，Skill 将自动加载。无需额外配置。
+安装后重新启动 Agent，Skill 将自动加载。也可以直接下载仓库，将整个目录放入对应 Agent 的 skills 目录，并保留目录名 `uk-uni-tutor`。
 
-### 2. 加载教案（可选但推荐）
+### 2. 运行要求
+
+- 支持 Skills 的 Agent，例如 Claude Code 或 Codex
+- Python 3.8+，仅在使用 `scripts/` 下的练习题或教案解析脚本时需要
+- 不需要上传教案，也不需要联网服务
+
+### 3. 加载教案（可选但推荐）
 
 直接粘贴教案文本，或指定文件路径：
 
@@ -47,7 +53,7 @@ git clone https://github.com/F416-Y/uk-uni-tutor.git ~/.claude/skills/uk-uni-tut
 
 Claude 将自动提取课程结构、章节知识点和例题解法模式，之后所有辅导都严格基于教案内容。
 
-### 3. 核心命令速览
+### 4. 核心命令速览
 
 | 命令 | 作用 |
 |------|------|
@@ -143,7 +149,7 @@ uk-uni-tutor/
 │   ├── terminology-guide.md              # 术语表 + 考试答题模板 + 英文词根列表
 │   ├── template-examples.md              # 预设逻辑答题模板范例（归纳法/反证法/假设检验等）
 │   ├── mindmap-guide.md                  # 飞书思维导图大纲格式规范与模板
-│   └── syllabus_index.json               # 教案结构化索引（自动生成，gitignore）
+│   └── syllabus_index.json               # 本地生成的教案索引，不应公开提交
 │
 └── scripts/                              # 辅助脚本
     ├── parse_syllabus.py                 # 教案文件解析与知识点提取
@@ -181,6 +187,12 @@ uk-uni-tutor/
 - **Anki**（免费）— 导入 `@learn` 生成的 CSV 抽认卡文件用于间隔重复记忆
 - **Python 3.8+** — 仅在使用 `scripts/` 目录下的脚本时需要
 - **教案文件**（.md / .txt / .pdf）— `@load-syllabus` 加载后启用教案驱动模式（不使用教案时 Skill 以通用模式运行）
+
+## 隐私、版权与学术诚信
+
+- 本 Skill 不会自动上传聊天记录、教案或用户文件。公开分享前，请删除个人信息、课程内部材料、版权教案和他人数据。
+- `references/syllabus_index.json` 只适合在本地根据自己的教案生成，不应提交到公开仓库。
+- Skill 只提供提问、分析框架和自检提示，不代写作业、不替用户完成可提交代码，也不绕过学校的学术诚信规则。
 
 ---
 
