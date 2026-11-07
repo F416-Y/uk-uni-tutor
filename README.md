@@ -1,6 +1,6 @@
 # UK Uni Tutor
 
-面向中文母语留学生的英国本科作业苏格拉底式辅导 Skill（适用于 Claude Code、Codex 等支持 Skills 的 Agent）。通过阶梯式提问、`#TODO` 填空和学科专属引导模板，帮助学生**独立完成作业**，不给答案，只给方法。
+面向中文母语留学生的英国本科作业苏格拉底式辅导 Skill（适用于 Claude Code、Codex、豆包等支持 `SKILL.md` 的 Agent）。通过阶梯式提问、`#TODO` 填空和学科专属引导模板，帮助学生**独立完成作业**，不给答案，只给方法。
 
 **适用对象**：在英国就读 CS/SE/数学/统计/工科等本科课程、以英文教案学习但更习惯中文思考的中国留学生。
 
@@ -35,8 +35,15 @@ npx skills add F416-Y/uk-uni-tutor -g -y
 ### 2. 运行要求
 
 - 支持 Skills 的 Agent，例如 Claude Code 或 Codex
+- 豆包支持 `SKILL.md` 技能规范，但应用插件接入需要按豆包的 `skill/` 目录和 `dbx build` 流程配置
 - Python 3.8+，仅在使用 `scripts/` 下的练习题或教案解析脚本时需要
 - 不需要上传教案，也不需要联网服务
+
+### 豆包兼容性说明
+
+豆包可以识别和加载 `SKILL.md`，详见[豆包 Skill 规范](https://open.doubao.com/apps-plugin/docs/core-concepts/skill-guidelines)。如果通过豆包应用插件接入，请将核心文件放入 `skill/uk-uni-tutor/SKILL.md`，再按[豆包打包与提审文档](https://open.doubao.com/apps-plugin/docs/release/package-and-submit)打包和调试。
+
+当前仓库是通用 Skills 包。豆包应用插件会递归打包 `SKILL.md`，不会自动打包 `references/`、`scripts/` 等其他文件，因此本 Skill 中依赖这些辅助文件的功能需要一并压缩进核心说明，或改造成豆包应用插件自己的工具和资源后才能完整使用。豆包侧也不应假设可以直接运行本地脚本或安装依赖。
 
 ### 3. 加载教案（可选但推荐）
 
